@@ -18,5 +18,22 @@ export const typeDefs =`#graphql
        hacker(input: HackerInput!) :Hacker!
        hackers :[Hacker!]
    }
+   input CreateHackerInput {
+      hackerName:String!
+      hackerPassword:String!
+   }
+   input AddHackedSite{
+      siteName:String!
+      siteDescription:String!
+      siteHackedYear:Int!
+   }
+   type AuthPayload {
+  token: String!
+  hacker: Hacker!
+ }
+   type Mutation {
+      createHacker(input:CreateHackerInput!): AuthPayload!
+      addHackedSites(input:AddHackedSites!) :HackedSite!
+   }
  
   `;

@@ -4,7 +4,7 @@ import { DataTypes, Model, Sequelize, type CreationOptional, type InferAttribute
 class Hackers extends Model<InferAttributes<Hackers>, InferCreationAttributes<Hackers>> {
       declare id:CreationOptional<string>;
         declare hackerName:string;
-
+       declare hackerPassword:string;
         static associate(models:any) {
               Hackers.hasMany(models.HackedSites, {
                 foreignKey:"hackerId",
@@ -24,6 +24,10 @@ export const initHackerModel = (sequelize:Sequelize):typeof Hackers => {
              hackerName :{
                 type:DataTypes.STRING,
                 allowNull:false,
+             },
+             hackerPassword:{
+                  type:DataTypes.STRING,
+                  allowNull:false
              }
        },{
                 sequelize,
