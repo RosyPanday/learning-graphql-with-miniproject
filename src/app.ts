@@ -1,4 +1,5 @@
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+// import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ApolloServer} from '@apollo/server';
 import express from 'express';
 import type {Express} from 'express';
@@ -18,8 +19,10 @@ import { resolvers } from './schema/resolvers.js';
   const server= new ApolloServer({
       typeDefs,
       resolvers,
+      introspection: true,
       plugins: [ApolloServerPluginDrainHttpServer({httpServer})
-      ]
+      ],
+    //   ApolloServerPluginLandingPageLocalDefault({ embed: true }),
   });
 
 
@@ -41,7 +44,7 @@ import { resolvers } from './schema/resolvers.js';
                 //its getting {user:decoded} , so context now has user property, accessing can be done with conetext.user.id etc
             })
         );
-         const PORT:number = Number(process.env.PORT)||3000;
+         const PORT:number = Number(process.env.PORT);
         httpServer.listen(PORT, () => {
             console.log(`Server is running on http://localhost:${PORT}/graphql`);
         });

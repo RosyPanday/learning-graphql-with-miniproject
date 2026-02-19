@@ -7,7 +7,7 @@ dotenv.config();
 
 interface IReturnOnHackerRegistration {
     token:string,
-    newHacker:IHacker
+    hacker:IHacker
 }
 interface IHacker {
         id?:string,
@@ -112,6 +112,7 @@ export const resolvers ={
             hackerName,
             hackerPassword:hashedPassword
          });
+         const hacker =newHacker;
          const jwtSecret = process.env.jwtSecret as string;
          const token:string = jwt.sign(
             {
@@ -125,7 +126,7 @@ export const resolvers ={
 
          return {
             token,
-            newHacker
+            hacker
          }
          
        },

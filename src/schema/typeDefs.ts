@@ -10,6 +10,7 @@ export const typeDefs =`#graphql
          siteName:String!
          siteDescription:String!
          siteHackedYear:Int!
+         hackerId:ID
    }
    input HackerInput {
            name: String!
@@ -33,7 +34,7 @@ export const typeDefs =`#graphql
  }
    type Mutation {
       createHacker(input:CreateHackerInput!): AuthPayload!
-      addHackedSites(input:AddHackedSites!) :HackedSite!
+      addHackedSites(input:AddHackedSite!) :hackedSite!
    }
  
   `;

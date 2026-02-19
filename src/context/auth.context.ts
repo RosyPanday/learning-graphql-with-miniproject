@@ -11,7 +11,7 @@ export const verifyTokenContext = async ({ req }: { req: Request }) :Promise<ICo
     const authHeader:string|undefined = req.get('authorization');
     const token:string|undefined =authHeader?.split(' ')[1];
     if(!token) {
-        throw new Error('No token provided');
+        return { models: db };
     }
     try {
         const jwtSecret:string = process.env.jwtSecret as string;
