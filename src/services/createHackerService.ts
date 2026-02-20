@@ -3,8 +3,10 @@ import type {
   typeOfhackedSite,
   typeOfhackers,
 } from "../interfaces/exportTypesOfModels.js";
+import {ValidationError} from "joi";
 import jwt from "jsonwebtoken";
 import type { IAddHackedSites } from "../schema/resolvers.js";
+import { createHackerValidation } from "../validations/createHackerValidations.js";
 export interface IHackerInterface {
   id: string;
   hackerName: string;
@@ -40,6 +42,13 @@ export const createHackerHandler = async (
   hackedSites: IAddHackedSites | undefined,
   HackedSites: typeOfhackedSite,
 ): Promise<ITotalDataType> => {
+    try {
+        await createHackerValidation.validateAsync({hackerName,hackerPassword});
+    }catch(error){
+       if(error instanceof ValidationError){
+           throw new Error(error.message);
+       }
+    }
   if (!hackerName || !hackerPassword) {
     throw new Error("provide hackerName and hackerPassword");
   }

@@ -99,7 +99,7 @@ export const resolvers ={
          const {Hackers,HackedSites} = context.models;
          const hackedSitesModel =context.models.HackedSites;
          const result =await createHackerHandler(hackerName,hackerPassword,Hackers,hackedSites,HackedSites);
-
+       
          return {
             token:result.token,
             hacker:result.hacker
