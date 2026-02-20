@@ -1,15 +1,14 @@
 import { QueryTypes } from "sequelize";
 import type { IContext } from "../context/auth.context.js"
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import dotenv from 'dotenv';
+import { createHackerHandler,  type IHackerInterface,  type ITotalDataType } from "../services/createHackerService.js";
 dotenv.config();
 
 interface IReturnOnHackerRegistration {
     token:string,
     hacker:IHacker
 }
-interface IHacker {
+export interface IHacker {
         id?:string,
          hackerName:string,
          hackerPassword:string,
@@ -94,44 +93,16 @@ export const resolvers ={
    Mutation: {
 
     //register a hacker profile
-        createHacker:async(parent:undefined, args:{input:IHacker},context:IContext):Promise<IReturnOnHackerRegistration> =>{
+        createHacker:async(parent:undefined, args:{input:IHacker},context:IContext):Promise<ITotalDataType> =>{
          const {hackerName, hackerPassword} = args.input;
          const {Hackers} = context.models;
-         if(!hackerName || !hackerPassword) {
-             throw new Error("provide hackerName and hackerPassword");
-         }
-          const existingHacker = await Hackers.findOne ({
-             where :{
-                hackerName:hackerName,
-             }
-          });
-
-          if(existingHacker) {
-            throw new Error("this name is taken and claimed");
-          }
-         type HackerType = InstanceType<typeof Hackers>;
-                      
-         const hashedPassword:string = await bcrypt.hash(hackerPassword,10);
-        const newHacker:HackerType=  await Hackers.create({
-            hackerName,
-            hackerPassword:hashedPassword
-         });
-         const hacker =newHacker;
-         const jwtSecret = process.env.jwtSecret as string;
-         const token:string = jwt.sign(
-            {
-                id:newHacker.id,
-                hackerName:newHacker.hackerName,
-            },
-             jwtSecret,
-             {expiresIn:'1d'}
-         );
-
+         const result =await createHackerHandler(hackerName,hackerPassword,Hackers);
 
          return {
-            token,
-            hacker
-         }
+            token:result.token,
+            hacker:result.hacker
+        
+         };
          
        },
 
