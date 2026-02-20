@@ -16,7 +16,7 @@ interface IHacker {
          hackedSites?:IHackedSite[]
 }
 interface IHackedSite {
-     id:string, 
+     id?:string, 
      siteName:string,
      siteDescription:string,    
      siteHackedYear:number
@@ -32,20 +32,24 @@ interface IAddHackedSites {
      siteDescription:string,    
      siteHackedYear:number,
 }
+interface IGethacker{
+     name: string,
+}
 export const resolvers ={
     Query :{
         //get one hacker
-        hacker:async(parent:undefined, args:{name:string},context :IContext ):Promise<IHackerNameAndId> =>{
+        hacker:async(parent:undefined, args:{input:IGethacker},context :IContext ):Promise<IHackerNameAndId> =>{
             const {Sequelize,sequelize} = context.models;
-
+              console.log("Args received:", args);
             const hackerData :IHackerNameAndId|null= await sequelize.query(
-                `Select id,hackerName 
+                `Select id,"hackerName" 
                 FROM table_hackers
-                WHERE hackerName=:inputName
+                WHERE "hackerName"=:inputName
                 LIMIT 1`,{
-                    replacements:{inputName: args.name},
-                    type:QueryTypes.SELECT,
+                    replacements:{inputName: args.input.name},
                     plain:true,  //to return one object instead of an array
+
+                    type:QueryTypes.SELECT,
                 }
             );
 
@@ -72,8 +76,8 @@ export const resolvers ={
             const {sequelize} = context.models;
 
             const hackedSiteData:IHackedSite[]=await sequelize.query<IHackedSite> (
-                `Select siteName, siteDescription,siteHackedYear
-                from table_hacked_sites WHERE hackerId=:parentId `,{
+                `Select "siteName", "siteDescription","siteHackedYear"
+                from table_hacked_sites WHERE "hackerId"=:parentId `,{
                     replacements:{parentId:parent.id},
                     type:QueryTypes.SELECT,
                     plain:false  //this returns an array and is the default
