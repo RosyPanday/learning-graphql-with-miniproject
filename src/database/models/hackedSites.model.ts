@@ -2,7 +2,7 @@ import { DataTypes, Model, Sequelize, type CreationOptional, type InferAttribute
 
 
 
-class HackedSites extends Model<InferAttributes<HackedSites>, InferCreationAttributes<HackedSites>> {
+export class HackedSites extends Model<InferAttributes<HackedSites>, InferCreationAttributes<HackedSites>> {
       declare id: CreationOptional<string>;
       declare siteName:string;
         declare siteDescription:string;

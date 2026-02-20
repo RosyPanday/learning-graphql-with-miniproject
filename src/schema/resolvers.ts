@@ -12,7 +12,7 @@ export interface IHacker {
         id?:string,
          hackerName:string,
          hackerPassword:string,
-         hackedSites?:IHackedSite[]
+         hackedSites?:IHackedSite
 }
 interface IHackedSite {
      id?:string, 
@@ -25,7 +25,7 @@ interface IHackerNameAndId{
     id:string,
     hackerName:string
 }
-interface IAddHackedSites {
+export interface IAddHackedSites {
      hackerId?:string,
      siteName:string,
      siteDescription:string,    
@@ -94,9 +94,11 @@ export const resolvers ={
 
     //register a hacker profile
         createHacker:async(parent:undefined, args:{input:IHacker},context:IContext):Promise<ITotalDataType> =>{
-         const {hackerName, hackerPassword} = args.input;
-         const {Hackers} = context.models;
-         const result =await createHackerHandler(hackerName,hackerPassword,Hackers);
+         const {hackerName, hackerPassword,hackedSites} = args.input;
+         
+         const {Hackers,HackedSites} = context.models;
+         const hackedSitesModel =context.models.HackedSites;
+         const result =await createHackerHandler(hackerName,hackerPassword,Hackers,hackedSites,HackedSites);
 
          return {
             token:result.token,
